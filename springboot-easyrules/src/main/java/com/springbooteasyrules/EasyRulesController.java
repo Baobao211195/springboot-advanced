@@ -17,10 +17,10 @@ public class EasyRulesController {
     @Autowired
     private CustomerRulesEngine customerRulesEngine;
 
-    @GetMapping(value = "run-rules")
+    @GetMapping(value = "/run-rules")
     public Customer runRulesDemo(@RequestBody CustomerDto dto) throws RulesException {
 
-        // set data fro rules
+        // set data for rules
         CustomerProcessor customerProcessor = new CustomerProcessor();
         customerProcessor.setFirstNameForRule("oanhpv to check rules");
 
