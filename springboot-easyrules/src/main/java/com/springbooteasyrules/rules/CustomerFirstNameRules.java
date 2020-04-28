@@ -21,14 +21,15 @@ public class CustomerFirstNameRules extends  BaseCustomerRule {
     @Condition
     public boolean when() {
         // when first name os customer is upper case
-        return isUpperCase();
+        return this.getFirstName() != null;
     }
 
     @Action(order = 0)
     public void checkAnyBusinessForRules() throws RulesException {
         this.setExecuted(true);
         // ========================= do stuff some business =========//
-
+        System.out.println("do somethings vs this rules");
+        throw  new RulesException("Has error in this rules");
     }
 
 }

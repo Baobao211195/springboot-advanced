@@ -40,4 +40,21 @@ public class CustomerRulesEngine extends ICustomerRulesEngine {
         rulesEngine.fireRules();
         handleException();
     }
+
+    public CustomerProcessor getCustomerProcessor() {
+        return customerProcessor;
+    }
+
+    @Override
+    public void setCustomerProcessor(CustomerProcessor customerProcessor) {
+        this.customerProcessor = customerProcessor;
+    }
+
+    public CustomerFirstNameRules getCustomerFirstNameRules() {
+        return customerFirstNameRules;
+    }
+
+    public void setCustomerFirstNameRules(CustomerFirstNameRules customerFirstNameRules) {
+        this.customerFirstNameRules = customerFirstNameRules;
+    }
 }

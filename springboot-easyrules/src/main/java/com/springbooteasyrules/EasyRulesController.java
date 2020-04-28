@@ -18,15 +18,18 @@ public class EasyRulesController {
     private CustomerRulesEngine customerRulesEngine;
 
     @GetMapping(value = "/run-rules")
-    public Customer runRulesDemo(@RequestBody CustomerDto dto) throws RulesException {
+    public Customer runRulesDemo() {
 
-        // set data for rules
-        CustomerProcessor customerProcessor = new CustomerProcessor();
-        customerProcessor.setFirstNameForRule("oanhpv to check rules");
+        try {
+            // set data for rules
+            CustomerProcessor customerProcessor = new CustomerProcessor();
+            customerProcessor.setFirstNameForRule("oanhpv to check rules");
 
-        // trigger rules
-        runSubmitOrderRulesEngine(customerProcessor);
-
+            // trigger rules
+            runSubmitOrderRulesEngine(customerProcessor);
+        } catch (RulesException e) {
+            e.printStackTrace();
+        }
         return  null;
     }
 
