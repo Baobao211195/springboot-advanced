@@ -81,4 +81,7 @@
     2. Subscriber có thể thực hiện các công việc đồng bộ hoặc bất đồng bộ nhưng luôn luôn phải là non-blocking.
     3. Cả publisher và subscriber cần phải đặt ra một giới hạn trên về xử lý của riêng mình, sau khi thiết lập giới hạn này
     có thể việc tràn bộ đệm sẽ xảy ra và có thể xuất hiện lỗi.
+    4. Trong trường hợp có Null Pointer Exception (NPE) (chỉ NPE thôi) thì Publisher sẽ gọi một hàm **onError** và Subscriber hủy bỏ **Subscription**
+Hai khái niệm rất quan trọng của reactive stream đó là **non-blocking** và **backpressure**.
+    - Non-blocking: các threads ko bao giờ bị block   
     
