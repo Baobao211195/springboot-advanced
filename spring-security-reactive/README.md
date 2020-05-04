@@ -52,8 +52,10 @@
     Điều này mang lại tính Loose coupling giữa các thành phần trong hệ thống.
     Việc tạo ra các messages push message, các subscriber đăng ký để nhận các message, xử lý nó rồi gửi các message này tới các subscibe khác để thử 
     hiện các công việc khác. Đây chính là các khái niệm cốt lõi của mô hình lập trình reactive và là các khái niệm cơ bản của một reactive system.
-    ![reactive](image/4_factors.png)
+      
+    ![reactive](image/4_factors.png)  
     ![reactive_2](image/4_1_factors.png)
+      
     Hình trên là mối quan hệ giữa các khái niệm trong Reactive Manifesto:
 #### Tổng quan Spring framework.
 => phần này tự đọc.
@@ -73,7 +75,10 @@
  - Việc trở thành một specification, nó cho phép bất kỳ implementation nào tôn trọng đặc tả và có liên kế với nhau.
  Ví dụ Akka có thể cùng làm việc với Vert.x thông qua đặc tả của Reactive Stream. Chính vì vậy đặt tả này được implementation
  dưới các ngôn ngữ khác nhau đang được phát hành.
- ![reactive_2](image/reactive_programming.png)
+ ![reactive_3](image/reactive_programming.png)
  Hình trên là thể hiện toàn bộ đặc tả của reactive streams. Bao gồm một vài rules và các thành phần sau:
     1. Giao tiếp giữa Publisher và Subscriber và ngược lại thì ko nên đồng bộ.
     2. Subscriber có thể thực hiện các công việc đồng bộ hoặc bất đồng bộ nhưng luôn luôn phải là non-blocking.
+    3. Cả publisher và subscriber cần phải đặt ra một giới hạn trên về xử lý của riêng mình, sau khi thiết lập giới hạn này
+    có thể việc tràn bộ đệm sẽ xảy ra và có thể xuất hiện lỗi.
+    
