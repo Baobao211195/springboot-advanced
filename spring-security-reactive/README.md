@@ -55,4 +55,25 @@
     ![reactive](image/4_factors.png)
     ![reactive_2](image/4_1_factors.png)
     Hình trên là mối quan hệ giữa các khái niệm trong Reactive Manifesto:
-#### Tổng quan Spring framework.    
+#### Tổng quan Spring framework.
+=> phần này tự đọc.
+#### Bối cảnh reactive trong Java.
+#### Reactive Streams and Reactive Streams Specifications
+ - Tài liệu chính thức từ trang chủ dành cho Reactive Stream: 
+ _Reactive Streams is an initiative to provide a standard for asynchronous stream processing
+ with non-blocking back pressure. This encompasses efforts aimed at runtime environments (JVM and
+ JavaScript) as well as network protocols_
+ - Nó được bắt đầu vào một nhóm của các cty vào năm 2013. Vào 2015 thì phiên phản 1.0 được phát hành, nó bao gồm một tập các
+ implementations (như là Akka streams và Vert.x) được công bố vào cùng một thời điểm. Đặc tả này được bắt đầu và bao gồm thư viện
+ tại trang chủ của Java và vào 2017 thì JDK9 được phát hành. Qua thời gian thì reactive specification bao gồm một vài core interfaces
+ , một vài rules xung quanh những interface này và TCK (Technology Compatibility Kit).
+ TCK là mộ bộ các test case được thự hiện kiểm tra tính đúng đắc của một JSR (**Java Specification Request**) implementation.
+ TCK là một trong ba các thành phần bắt buộc dành cho việc phê chuẩn một JSR. Thành phần thứ 2 là JSR specification 
+ và JSR reference implementation. TCK dành cho Java platform được gọi là Java Compatibility Kit(JCK).
+ - Việc trở thành một specification, nó cho phép bất kỳ implementation nào tôn trọng đặc tả và có liên kế với nhau.
+ Ví dụ Akka có thể cùng làm việc với Vert.x thông qua đặc tả của Reactive Stream. Chính vì vậy đặt tả này được implementation
+ dưới các ngôn ngữ khác nhau đang được phát hành.
+ ![reactive_2](image/reactive_programming.png)
+ Hình trên là thể hiện toàn bộ đặc tả của reactive streams. Bao gồm một vài rules và các thành phần sau:
+    1. Giao tiếp giữa Publisher và Subscriber và ngược lại thì ko nên đồng bộ.
+    2. Subscriber có thể thực hiện các công việc đồng bộ hoặc bất đồng bộ nhưng luôn luôn phải là non-blocking.
