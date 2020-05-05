@@ -83,5 +83,62 @@
     có thể việc tràn bộ đệm sẽ xảy ra và có thể xuất hiện lỗi.
     4. Trong trường hợp có Null Pointer Exception (NPE) (chỉ NPE thôi) thì Publisher sẽ gọi một hàm **onError** và Subscriber hủy bỏ **Subscription**
 Hai khái niệm rất quan trọng của reactive stream đó là **non-blocking** và **backpressure**.
-    - Non-blocking: các threads ko bao giờ bị block   
+    - Non-blocking: các threads ko bao giờ bị block, nếu thread bị lock thì cần phải có thông báo đúng thời điểm và quá
+    trình vẫn có thể tiếp tục xảy ra. Việc xây dựng lên các ứng dụng non-blocking sẽ sử dụng message để gửi data. Các thread sẽ gửi message
+    và nhận lại ngay khi có phản hồi , tiếp tục gửi tới các thread khác để xử lý các task vụ khác. Khái niệm Non-blocking này 
+    cũng được implemented bởi các frameworks như Node.js và Akka.
+    - Backpressure: Theo kịch bản lý tưởng, mọi message được tạo ra từ producer và gửi tới subscriber mà ko có delay.
+    nhưng trên thực tế thì subscriber không thể handle các message vào cùng một thời điểm khi chúng được gửi tới.
+    Chính vì vậy Backpressure là một cách thức mà subscriber nói cho producer biết gửi message và một tốc độ chậm tới
+    subscriber  để có thể xử lý các message này một các hợp lý mà ko cần phải gây ra quá nhiều áp lực tới resources.
+#### Reactive Extensions
+ - Là một thư viên dành cho các chương trình xử lý bất đồng bộ và event-based sử dụng các chuỗi tuần tự có thể quan sát theo thời gian
+ và các toán tử query LINQ-style. Các chuỗi dữ liệu tuần tự có thể mang nhiều định dạng khác nhau như là dưới dạng stream, file hoặc web service,
+ system notifications hoặc chuỗi các events từ người dùng.
+ - Những API cho phép xử lý các tổ hớp các stream data sử dụng Observer pattern.
+ - Observer pattern: định nghĩa một provider(được hiểu là một subject hoặc 1 observable) và gồm nhiều 0 hoặc 1 hoặc nhiều observers.
+  Các Observers đăng ký với provider và bất kỳ khi nào một điều kiện được xác định , một sự kiện, hoặc sự thay đổi trạng thái thay đổi
+  provider tự động thông báo tới các observers bắng cách gọi một trong các phương thức của các observers đó. 
+#### RxJava.
+ - Là một Java VM implementation của ReactiveX. một thư viên nhỏ tập trung vào lớp abstract của observable. Nó dễ dàng
+ tích hợp và các thư viện khác như rxjava-jdbc, Camel RX.
+#### Reactive Streams và RxJava.
+ - RxJava 2.x là một phiên bản hoàn chỉnh  của RxJava 1.x, nó sử dụng Java8+.
+ - Những interface quan trọng trong reactive stream specifications.
+    + Publisher
+    + Subscriber
+    + Subscription
+    + Processor: Kế thừa cả từ Publisher và Subscriber
+#### Spring Framework and reactive applications.
+- Sử dụng Reactor là một implementing của Reactive Stream Specification, là thế hệ thứ 4 của thư viện reactive dành cho
+việc xây dựng các ứng dụng non-blocking trên nền máy ảo dựa vào reactive stream specification.
+- Các modules trong reactor tại phiên bản mới nhất là Reactor 3.x:
+    + Reactor Core: Thư viện chính trong Reactor, cung cấp việc implementation non-blocking JVM RSS (reactive stream specification)
+    Nó cũng bao gồm 2 kiểu dữ liệu trong reactor là Flux và Mono.
+    + Reactor IO: Bao gồm các backpressure-ready components có thể được sử dụng để encode, decode.. và phục vụ các connections.
+    Nó cũng support Kafka, Netty và Aeron.
+    + Addons: bao gồm 3 components:
+        + reactor-adapter: Bao gồm 1 cầu nối từ RxJava 1 or 2 kiểu giống như là Observable, Completable, Single, Maybe and 
+        Mono/Flux
+        + reactor-logback: Hỗ trợ ghi log thông qua các bộ xử lý bất đồng bộ reactor core.
+        + reactor-extra: Bao gồm nhiều operations dành cho Flux nhưng là các xử lý toàn học ..
+    + Reactive Stream Commons: là việc tổ hợp giữa Reactor vs RxJava.
+#### Reactive types in reactor core.
+- Reactor cung cấp 2 kiểu dữ liễu là Flux và Mono , chúng thể hiện sự thay đổi dự liệu theo thời gian. Điều quan trọng nhất
+là sử dụng kiểu dữ liệu nào cho phù hợp.
+- Flux:
+    - Là một publisher có các operators có thể tạo ra 0 tới N elements và hoàn thành.  
+    ![Flux](image/Flux.png)
+      Hình trên mô tả cách hoạt động của Flux.
+    - Có nhiều cách tạo ra 1 Flux.
+    (tham khảo các API https://projectreactor. io/docs/core/release/api/reactor/core/publisher/Flux.html.)
+- Mono:
+    - Là một publisher có các operators chỉ có thể tạo ra 1 element hoặc 1 lỗi.  
+      ![Flux](image/Mono.png)
+      Hình trên mô tả cách hoạt động của Mono.   
+#### Link tham khảo
+https://dev.to/bufferings/springboot2-blocking-web-vs-reactive-web-46jn
+    
+
+    
     
