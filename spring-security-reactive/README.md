@@ -205,6 +205,11 @@ Hình dưới là mô tả spring security làm việc.
 
 ###### Core Spring Security modules
 
+
+### Chương 2 Đi sâu vào spring security.
+#### Authentication.
+
+
 #### Link tham khảo
 https://dev.to/bufferings/springboot2-blocking-web-vs-reactive-web-46jn
     
