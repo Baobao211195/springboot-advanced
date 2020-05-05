@@ -135,7 +135,76 @@ là sử dụng kiểu dữ liệu nào cho phù hợp.
 - Mono:
     - Là một publisher có các operators chỉ có thể tạo ra 1 element hoặc 1 lỗi.  
       ![Flux](image/Mono.png)
-      Hình trên mô tả cách hoạt động của Mono.   
+      Hình trên mô tả cách hoạt động của Mono.  
+     Mono<Void> hay sử dụng trong trường hợp hoàn thành mà ko cần phải return về giá trị nào cả. 
+     Có rất nhiều cách tạo ra một Mono tham khảo API.
+#### Data stream types
+- Được phân thành 2 loại.
+    + Cold data stream: bao gồm Cold Source, Cold Observable và Cold Publisher. Chúng emit dữ liệu chỉ khi có một 
+    subscriber tới và chính vì điều này tất cả các message được tạo ra từ khi bắt đầu được gửi thẳng tới subsciber. 
+    Nếu một subsciber mới kết nối tới một publisher, các message được gửi lại theo thứ tự tăng dần và điều này được 
+    thực hiện đối với tất cả các Subsciber mới.
+    Subscriber cũng có một bộ dự phòng để thông báo về tốc độ khi nào Publisher nên emit message.
+    + Hot data stream: nó có thể được gọi là Hot Source, Hot Observable và Hot Publisher. tức là data được emit bất cứ 
+    lúc nào khi subscribed đã kết nối. Khi một subscriber mới kết nối thì emit message từ thời điểm tạo ra, ko tạo lại message
+    từ thời điểm bắt đầu. Nó không thể dừng việc emit message do vậy một kỹ thuật thay đổi là cần thiết để điều khiển
+    flow data như là buffer. Ví dụ của stream loại này là Mouse events và giá của chứng khoán.
+Điều quan trọng nhất là các operators xử lý trên 1 stream có thể thay đổi đặc tính của chúng, từ cold tới hot và ngược lại.
+Cũng có khi là có thể merge giữ hot và cold có thể xảy ra và các đặc tính của stream được thay đổi.
+
+#### Reactive Web Application
+##### Spring WebFlux.
+- Sử dụng để xây dựng các web applications trên top của reactive streams, có khả năng chạy non-blocking server như Netty, Undertow,
+và Servlet containers greater than 3.1.
+- Yêu cầu Reactor là một trong những phần core, nhưng nó cho phép chúng ta chuyển sang 1 implementations khác một cách dễ
+dàng nếu cần.
+
+##### Reactive Spring Web.
+The Spring Web Modules có nhiều phần để xây dựng các ứng dụng web reactive. Cho phép chúng ta thao tác giữa client và server.
+Những tính năng này nó cung cấp phía server được phân chia làm 2:  
+    + HTTP: bao gồm các APIs dành cho xử lý các HTTP request đối với các server được support  
+    + Web: bao gồm các APIs dành cho xử lý request.
+    
+##### WebClient.
+- Là một reactive web client sử dụng để thực hiện gửi các web requets.
+##### WebSockets.
+- Cho phép chúng ta thiết lập connection 2 chiều giữa client và server.
+##### Application security.
+##### Spring security.
+ - Các thành phần của spring security:
+    + Principal: bất kỳ đối tượng nào (user, device, system) muốn tương tác và ứng dụng của bạn.
+    + Authentication: Là một xử lý để ứng dụng của bạn biết chắc chắn principal là ai.
+    + Credentials: là object sau khi ứng dụng xác thực thành công một Principal.
+    + Authorization: Sau khi authen thành công, principal sẽ được  kiểm tra các action có thể được thao tác vs ứng dụng
+    , xử lý này sẽ kiểm tra và gán cho principal nhưng quyền cần thiết.
+    + Secured item/resource: là tài nguyên của ứng dụng được bảo vệ. chỉ được truy cập khi authen và author được hoàn thành.
+    + GrantedAuthority: là một interface bao gồm nắm giữ các permission, quyền truy cập chi tiết của một principal.
+    + SecurityContext: là Object dùng để lưu trữ một principal đã được authenticated.
+    
+###### Spring security core feature.
+- Authentication: 
+- Authorization: 
+    + Phân quyền qua URL
+    + Phân quyền qua method.
+    + Phần quyền qua Domain
+    + Phân quyền bằng web service.
+###### Spring Security 5's new features.
+- Các tính năng mới trong spring 5.
+    + Support dành cho OAuth 2.0 và OpenID connect(OIDC) 1.0: cho phép user login vào ứng dựng thông qua github hoặc thông qua
+     google sử dụng OIDC. 
+    + Support Reactive:
+    + Cải tiến việc mã hóa password: Sử dụng nhiều hơn 1 thuật toán mã hóa. Spring nhận ra thuật toán bằng cách đọc prefix
+     của đoạn mã hóa được endcode (nó sẽ bao gồm thuật toán sử dụng vs format như sau ({algorithm}endcode_passwod)
+###### Working of Spring Security
+ + Servlet Filter.
+ + Filter Chain.
+ + Security Interceptor (DelegatingFilterProxy)  
+Hình dưới là mô tả spring security làm việc.  
+ 
+![security_working](image/Spring_security_working.png)  
+
+###### Core Spring Security modules
+
 #### Link tham khảo
 https://dev.to/bufferings/springboot2-blocking-web-vs-reactive-web-46jn
     
