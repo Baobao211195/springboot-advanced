@@ -21,7 +21,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(customAuthenticationProvider);
 
         // order 2
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+        auth.inMemoryAuthentication()
+            .withUser("admin")
+            .password("admin")
+            .roles("ADMIN")
+            .and()
+            .withUser("user")
+            .password("{noop}user@password")
+            .credentialsExpired(true)
+            .accountExpired(true)
+            .accountLocked(true)
+            .roles("USER");;
     }
 
     @Override
