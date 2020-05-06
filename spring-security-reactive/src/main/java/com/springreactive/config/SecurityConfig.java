@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .credentialsExpired(true)
             .accountExpired(true)
             .accountLocked(true)
-            .roles("USER");;
+            .roles("USER");
     }
 
     @Override
