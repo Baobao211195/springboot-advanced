@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.*;
 
-@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -23,11 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.jdbcAuthentication()
-           .dataSource(dataSource)
-           .usersByUsernameQuery("select id, username, password, enabled from users where username = ?")
-           .authoritiesByUsernameQuery("select id, userid, authority from authorities where userid = ?")
-           .passwordEncoder(new BCryptPasswordEncoder());
+        auth
+            .inMemoryAuthentication()
+            .withUser("admin")
+            .password("{noop}admin@password").roles("ADMIN");
+
+//       auth.jdbcAuthentication()
+//           .dataSource(dataSource)
+//           .usersByUsernameQuery("select id, username, password, enabled from users where username = ?")
+//           .authoritiesByUsernameQuery("select id, userid, authority from authorities where userid = ?")
+//           .passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
