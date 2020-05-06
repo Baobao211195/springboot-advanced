@@ -1,12 +1,16 @@
 package com.springsecuritydemo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.sql.*;
 
 @EnableWebSecurity
 @Configuration
@@ -14,23 +18,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomAuthenticationProvider customAuthenticationProvider;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // order 1
-        auth.authenticationProvider(customAuthenticationProvider);
-
-        // order 2
-        auth.inMemoryAuthentication()
-            .withUser("admin")
-            .password("admin")
-            .roles("ADMIN")
-            .and()
-            .withUser("user")
-            .password("{noop}user@password")
-            .credentialsExpired(true)
-            .accountExpired(true)
-            .accountLocked(true)
-            .roles("USER");
+       auth.jdbcAuthentication()
+           .dataSource(dataSource)
+           .usersByUsernameQuery("select id, username, password, enabled from users where username = ?")
+           .authoritiesByUsernameQuery("select id, userid, authority from authorities where userid = ?")
+           .passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
@@ -40,10 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
+        http.authorizeRequests().anyRequest().hasAnyRole("ADMIN", "USER")
             .and()
-            .authorizeRequests()
-            .antMatchers("/**")
-            .authenticated();
+            .httpBasic(); // Use Basic authentication
     }
 }
