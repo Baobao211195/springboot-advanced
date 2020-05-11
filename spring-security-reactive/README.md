@@ -208,7 +208,101 @@ Hình dưới là mô tả spring security làm việc.
 
 ### Chương 2 Đi sâu vào spring security.
 #### Authentication.
-
+   - Create a sample project spring-security-demo.
+    
+#### Authorization.
+- Authorization được quản lý bởi một manager là AccessDecisionManager interface. Trong spring security có 3 implementations của interface này.
+ là  AffirmativeBased,ConsensusBased, và  UnanimousBased. AccessDecisionManager hoạt động bằng cách gán cho 1 mắt xích của 
+ interface AccessDecisionVoter.
+ ![security_authorization](image/spring_authorization.png)  
+ 
+  Trong  spring security, authorization một tài nguyên được thực hiện bằng cách gọi cái voters và đánh dấu các voters này đã nhận được.
+    3 implementations ghi nhớ các votes đã nhận này theo các cách khác nhau.
+    +  AffirmativeBased (khẳng định): Nếu có ít nhất một voter đồng ý thì user sẽ nhận được quyền access vào tài nguyên.
+    +  ConsensusBased(đoàn kết): nếu một sự đồng thuận rõ ràng được đạt tới giữa các voters về các votes của chúng, thì user sẽ nhận được quyền access vào tài nguyên.
+    +  UnanimousBased(nhất trí): nếu có tất cả các vote từ các voter thì user sẽ nhận được quyền access vào tài nguyên.   
+  Spring security cung cấp 2  cách thứ để phân quyền:
+    + Web URL: các url đến (có thể là 1 url cụ thể hoặc tuân theo regex)
+    + Method: việc phân quyền có thể applie vào từng method cụ thể.
+  1. Phân quyền theo web URL. 
+    Spring security có thể được sử dụng để thiết lập việc phần quyền dựa trên url (Việc phân quyền này dùng khi 
+    chúng ta phân quyền trên 1 tập tài nguyên tuân theo chuẩn Rest). HTTP security đã được configured có thể 
+    được sử dụng để thiết lập các config cho việc phân quyền. Thông thường thì chúng ta sử việc matching theo patter.
+        + AntPathRequestMatcher: example **("/rest/**")**or ("/rest/movie/**")... 
+        ```java
+        http  
+          .antMatcher("/rest/**")  
+          .httpBasic()
+          .disable()
+          .authorizeRequests()
+          .antMatchers("/rest/movie/**", "/rest/ticket/**", "/index")
+          .hasRole(`"ROLE_USER");
+        ```
+        + MvcRequestMatcher: Sử dụng trong Spring MVC để match theo path. Việc matching thì liên quan tới servlet path.
+        + RegexRequestMatcher: Sử dụng regex để match URL dựa theo định dạng (servletPath + pathInfo + queryString):
+        ```java
+            http
+            .authorizeRequests()
+            .regexMatchers("^((?!(/rest|/advSearch)).)*$").hasRole("ADMIN")
+            .regexMatchers("^((?!(/rest|/basicSearch)).)*$").access("hasRole(USER)")
+            .anyRequest()
+            .authenticated()
+            .and()
+            .httpBasic();
+        ```
+  2. Method invocation. 
+  Tư tưởng của việc phân quyền dựa trên method là việc sử dụng AOP. có thể cấu hình sử dụng xml hoặc java anotation.
+  Việc phân quyền dựa theo phương thức trong trường hợp các method ko tuân theo nguyên lý Rest hoặc để expose API.
+  Nếu muốn sự dụng phần quyền cho từng method , đầu tiên sử dụng **@EnableMethodSecurity** anotation. Có 3 loại anotation
+  có thể anotate vào method.
+        +  **Voting-base annotation**: là **@Secured** annotation. Muốn sử dụng annotation này chúng ta phải thêm   
+        ```java
+            @Configuration
+            @EnableGlobalMethodSecurity(securedEnabled = true)
+            public class SecurityConfig extends WebSecurityConfigurerAdapter {
+            }
+        ```  
+     Example:
+     ```java
+        @GetMapping("public")
+        @Secured("ROLE_PUBLIC")
+        public String publiclyAvailable() {
+             return "Hello All!";
+        }
+     ```
+     + **JSR-250 security annotations**: nằm trong securiry annotation của Enterprise JavaBeans 3.0 (EJB 3) 
+     có thể sử dụng bằng cách thêm **@EnableGlobalMethodSecurity(jsr250Enabled = true)**   
+     Example:
+     ```java
+        @GetMapping("public")
+        @PermitAll
+        public String publiclyAvailable() {
+             return "Hello All!";
+        }
+        @GetMapping("admin")
+        @RolesAllowed({"ROLE_ADMIN"})
+        public String adminAccessible() {
+             return "Hello Admin!";
+        }
+     ```
+     + **Expression-based annotation**: là các annotation **@Pre** và **@Post**, sử dụng bằng cách thêm 
+     **@EnableGlobalMethodSecurity(prePostEnabled = true)**.  
+     Example:  
+     ```java
+        @GetMapping("public")
+        @PreAuthorize("permitAll()")
+        public String publiclyAvailable() {
+             return "Hello All!";
+        }
+        @GetMapping("admin")
+        @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+        public String adminAccessible() {
+             return "Hello Admin!";
+        }
+        ```
+     **hasAnyAuthority** gọi là spring expression language. 
+     
+  
 
 #### Link tham khảo
 https://dev.to/bufferings/springboot2-blocking-web-vs-reactive-web-46jn
