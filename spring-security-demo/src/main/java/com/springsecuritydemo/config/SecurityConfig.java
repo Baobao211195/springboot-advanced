@@ -19,8 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomAuthenticationProvider customAuthenticationProvider;
 
-    @Autowired
-    private DataSource dataSource;
+//    @Autowired
+//    private DataSource dataSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
