@@ -302,7 +302,20 @@ Hình dưới là mô tả spring security làm việc.
         ```
      **hasAnyAuthority** gọi là spring expression language. 
      
-  
+### Chương 3 Các kỹ thuật authentication
+
+#### Authenticationi sử dụng SAML.
+- Mô đun application.SAML có thể là
+    + 1 tập các messages dựa trên xml
+    + 1 tập cách thức bindings message
+    + 1 tập các profiles
+- Identifier Provider (IdP) là một hệ thống để tạo , duy trì, quản lý thông tin định danh của các đối tượng (users, services
+hoặc systems) và cung cấp thông tin đã được authentication tới các service providers khác nằm trong 1 mạng hoặc 1 hệ thống phân tán.
+- Service Provider (SP) là bất kỳ hệ thống nào cung cấp service, cụ thể là các service dành cho user để thực hiện việc authentication bao 
+gồm web.. Các loại SP bao gồm service provider, indentity provider, thông tin administers identity.
+
+
+
 
 #### Link tham khảo
 https://dev.to/bufferings/springboot2-blocking-web-vs-reactive-web-46jn
