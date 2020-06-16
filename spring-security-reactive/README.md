@@ -312,7 +312,11 @@ Hình dưới là mô tả spring security làm việc.
 - Identifier Provider (IdP) là một hệ thống để tạo , duy trì, quản lý thông tin định danh của các đối tượng (users, services
 hoặc systems) và cung cấp thông tin đã được authentication tới các service providers khác nằm trong 1 mạng hoặc 1 hệ thống phân tán.
 - Service Provider (SP) là bất kỳ hệ thống nào cung cấp service, cụ thể là các service dành cho user để thực hiện việc authentication bao 
-gồm web.. Các loại SP bao gồm service provider, indentity provider, thông tin administers identity.
+gồm web.. Các loại SP bao gồm service provider, indentity provider, thông tin administers identity.  
+
+#### Authenticationi sử dụng LDAP.
+
+#### OAuth2 and OpenID Connect.
 
 
 
