@@ -27,9 +27,7 @@ public class MovieHandler {
     }
 
     public Mono<ServerResponse> getMovieById(ServerRequest request) {
-        Long id = request.pathVariable("id")
-            .map(p -> (Long) p)
-            .orElseThrow(() -> new IllegalArgumentException("error"));
+        Long id = Long.parseLong(request.pathVariable("id"));
         Mono<Movie> movie = movieRepository.getById(id);
         return
             ServerResponse.ok()
@@ -41,9 +39,9 @@ public class MovieHandler {
             .bodyToMono(Movie.class)
             .map(p -> movieRepository.saveMovie(p))
             .flatMap(el ->
-                    ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(el, Movie.class));
+                ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(el, Movie.class));
     }
     public Mono<ServerResponse> getMovie(ServerRequest request) {
         return request.bodyToMono(ServerResponse.class);
